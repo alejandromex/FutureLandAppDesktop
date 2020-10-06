@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data.Sql;
 using System.Data;
+using System.Windows.Forms;
 
 namespace futureland.Models
 {
@@ -17,10 +18,11 @@ namespace futureland.Models
         public string mdlRegistrarHumedad(int valor)
         {
             string status = "error";
-            string query = @"INSERT INTO registros values (@valor)";
+            string query = @"INSERT INTO registros values (@valor, @date)";
 
             cmd.Parameters.Clear();
             cmd.Parameters.AddWithValue("@valor", valor);
+            cmd.Parameters.AddWithValue("@date", DateTime.Now.AddSeconds(10f));
             cmd.CommandText = query;
             try
             {
@@ -42,6 +44,31 @@ namespace futureland.Models
             cmd.CommandText = query;
             dt = conectar.Ejecutar(cmd);
             return dt;
+        }
+
+        public DataTable mdlMostrarRegistrosHumedadFiltro(string min = null, string max = null, string fechai = null, string fechaf = null)
+        {
+
+            string query = @"SELECT * from registros where valor >= @min and valor <= @max and fecha >= @fechai and fecha <= @fechaf";
+            cmd.Parameters.Clear();
+            cmd.Parameters.AddWithValue("@min", min);
+            cmd.Parameters.AddWithValue("@max", max);
+            cmd.Parameters.AddWithValue("@fechai", fechai);
+            cmd.Parameters.AddWithValue("@fechaf", fechaf);
+
+
+
+            cmd.CommandText = query;
+            dt = conectar.Ejecutar(cmd);
+            return dt;
+        }
+
+        public void createDataTable()
+        {
+
+            conectar.CrearDb();
+            
+           
         }
     }
 }

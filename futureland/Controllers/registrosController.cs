@@ -29,5 +29,14 @@ namespace futureland.Controllers
 
             return dt;
         }
+
+        public DataTable ctrMostrarRegistrosHumedadFiltro(string min, string max, string fechai, string fechaf)
+        {
+
+            dt = registrosModelo.mdlMostrarRegistrosHumedadFiltro(min, max, fechai, fechaf);
+
+            return dt;
+        }
+    
     }
 }

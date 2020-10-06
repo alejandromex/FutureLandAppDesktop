@@ -24,5 +24,50 @@ namespace futureland.Helpers
                 return dt;
             }
         }
+
+
+        public void CrearDb()
+        {
+            System.Data.SqlClient.SqlConnection tmpConn;
+            string sqlCreateDBQuery;
+            tmpConn = new SqlConnection();
+            tmpConn.ConnectionString = "Data Source="+globales.globalDatabase+";Initial Catalog=master;Integrated Security=True";
+            sqlCreateDBQuery = "IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'GUTACION')" +
+                " BEGIN " +
+                " CREATE DATABASE GUTACION" +
+                "" +
+                " END "; 
+               //"GO " +
+
+            string queryTable = " USE" +
+                " GUTACION " +
+                "IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='registros' and xtype='U')" +
+                " BEGIN" +
+                " CREATE TABLE registros (" +
+                " id INT PRIMARY KEY IDENTITY (1, 1), " +
+                "valor INT," +
+                " fecha datetime ) " +
+                "END";
+            SqlCommand myCommand = new SqlCommand(sqlCreateDBQuery, tmpConn);
+            SqlCommand cmd = new SqlCommand(queryTable, tmpConn);
+            try
+            {
+                tmpConn.Open();
+                myCommand.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Create Database",
+                                            MessageBoxButtons.OK,
+                                     MessageBoxIcon.Information);
+            }
+            finally
+            {
+                tmpConn.Close();
+            }
+            return;
+        }
     }
 }

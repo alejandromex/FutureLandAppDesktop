@@ -24,13 +24,15 @@ namespace futureland.Views
         Controllers.registrosController registrosController = new Controllers.registrosController();
         private DataTable dt = new DataTable();
         SerialPort Port;
+        private bool btnInterval = true;
         public bool isClosed = true;
 
 
         public mainForm()
         {
             InitializeComponent();
-            
+            Port = new SerialPort();
+
 
         }
 
@@ -49,6 +51,11 @@ namespace futureland.Views
 
         private void btnRegistros_Click(object sender, EventArgs e)
         {
+            if(globales.globalDatabase == null)
+            {
+                MessageBox.Show("Configure Base de datos y Puerto COM antes de iniciar");
+                return;
+            }
             FormCollection fc = Application.OpenForms;
             foreach (Form frm in fc)
             {
@@ -67,12 +74,22 @@ namespace futureland.Views
             DialogResult dialogResult = MessageBox.Show("¿Desea Salir?", "Salir", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
             if(dialogResult == DialogResult.Yes)
             {
-                if (Port.IsOpen)
+                try
                 {
-                    Port.Close();
+                    if (Port.IsOpen)
+                    {
+                        Port.Close();
+                    }
+                    isClosed = false;
+
+                }
+                catch
+                {
+
                 }
 
-                isClosed = false;
+
+
                 Application.Exit();
             }
         }
@@ -103,43 +120,78 @@ namespace futureland.Views
 
         private void btnEncender_Click(object sender, EventArgs e)
         {
-            Thread arduino;
-            arduino = new Thread(lecturaArduino);
-            arduino.Start();
+            if (globales.globalCom == null && globales.globalDatabase == null)
+            {
+                MessageBox.Show("Seleccione puerto COM y base de datos antes de iniciar");
+            }
+            else
+            {
+                if (btnInterval)
+                {
+                    Thread arduino;
+                    arduino = new Thread(lecturaArduino);
+                    arduino.Start();
+                    btnEncender.Text = "Apagar";
+                    btnInterval = false;
+                    isClosed = true;
+                    Port.BaudRate = 9600;
+                    //            Port.PortName = "COM3";
+                    Port.ReadTimeout = 500;
+                    Port.PortName = globales.globalCom;
+                    Port.Open();
+                }
+                else
+                {
+                    isClosed = false;
+                    btnEncender.Text = "Encender";
+                    btnInterval = true;
+                    Port.Close();
+                }
+
+            }
 
         }
 
         private void lecturaArduino()
         {
             //Iniciamos lectura de arduino
-            if (globales.globalCom == null)
+            if (globales.globalCom == null && globales.globalDatabase == null) 
             {
                 MessageBox.Show("Seleccione el puerto COM para la lectura de humedad");
             }
             else
             {
-                Port = new SerialPort();
-                Port.BaudRate = 9600;
-                //            Port.PortName = "COM3";
-                Port.ReadTimeout = 500;
-                Port.PortName = globales.globalCom;
 
-                Port.Open();
                 while (isClosed)
                 {
                     try
                     {
                         string cadena = Port.ReadLine();
+                        string status;
                         medidorHumedad.Invoke(new MethodInvoker(delegate
                         {
                             if (cadena.Contains("holamundo"))
                             {
                                 cadena = cadena.Replace("holamundo", "");
                                 cadena = cadena.Trim();
-                                medidorHumedad.Value = int.Parse(cadena);
+                                try
+                                {
+                                    medidorHumedad.Value = int.Parse(cadena);
+                                }
+                                catch
+                                {
+
+                                }
                                 medidorHumedad.Text = "Humedad: " + cadena;
                                 lblEstado.Text = "Estado: Prendido";
-                                string status = registrosController.ctrRegistrarHumedad(int.Parse(cadena));
+                                try
+                                {
+                                     status = registrosController.ctrRegistrarHumedad(int.Parse(cadena));
+                                }
+                                catch
+                                {
+                                     status = "error";
+                                }
                                 if (status == "error")
                                 {
                                     MessageBox.Show("Error al registrar humedad");

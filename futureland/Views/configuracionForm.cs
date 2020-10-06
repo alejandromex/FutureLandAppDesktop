@@ -97,6 +97,9 @@ namespace futureland.Views
             COM = cmbCom.Text;
             globales.globalDatabase = database;
             globales.globalCom = COM;
+
+            Models.registrosModelo registrosModelo = new Models.registrosModelo();
+            registrosModelo.createDataTable();
             this.Close();
             
         }
