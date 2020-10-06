@@ -6,12 +6,12 @@ Aplicacion de escritorio para FutureLand - El futuro del trabajo
 
 Para entrar al Archivo .exe entrar a futureland > bin > Debug futureland.exe
 
-#Requisitos
+# Requisitos
 
   - Sistema gestor de base de datos SQLServer
   - Dispositivo HARDWARE Gutacion para la deteccion de temperatura conectada via puerto USB
   
-#Una vez la App abierta
+# Una vez la App abierta
 
   - Si es tu primer ingreso, Usuario: Admin, Contraseñas: Admin
   - Dirigirse a configuraciones, seleccionar Servidor de SGBD disponible y Puerto COM donde este Gutacion
