@@ -4,7 +4,7 @@ Aplicacion de escritorio para FutureLand - El futuro del trabajo
 
 # Uso
 
-Para entrar al .exe Archivo entrar a futureland > bin > Debug futureland.exe
+Para entrar al Archivo .exe entrar a futureland > bin > Debug futureland.exe
 
 #Requisitos
 
