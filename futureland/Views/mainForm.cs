@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Data.Sql;
-using System.Data;
 using futureland.Helpers;
 using System.IO.Ports;
 using System.Threading;
@@ -111,6 +110,7 @@ namespace futureland.Views
                 }
 
             }
+            configuracionForm configuracionForm = new configuracionForm();
             configuracionForm.Show();
 
 

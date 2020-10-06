@@ -8,14 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data;
 
 namespace futureland.Views
 {
 
     public partial class registroForm : Form
     {
-        int xClick = 0, yClick = 0;
         registrosController registrosController = new registrosController();
         DataTable dt = new DataTable();
 
@@ -58,7 +56,7 @@ namespace futureland.Views
             dt = registrosController.ctrMostrarRegistrosHumedadFiltro(min, max, fechai, fechaf);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                string[] row = { dt.Rows[i]["valor"].ToString(), dt.Rows[i]["fecha"].ToString()};
+                string[] row = { dt.Rows[i]["id"].ToString(), dt.Rows[i]["valor"].ToString(), dt.Rows[i]["fecha"].ToString() };
                 dgvRegistros.Rows.Add(row);
 
             }
@@ -71,7 +69,7 @@ namespace futureland.Views
             dt = registrosController.ctrMostrarRegistrosHumedad();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                string[] row = { dt.Rows[i]["valor"].ToString(), dt.Rows[i]["fecha"].ToString() };
+                string[] row = {dt.Rows[i]["id"].ToString() , dt.Rows[i]["valor"].ToString(), dt.Rows[i]["fecha"].ToString() };
                 dgvRegistros.Rows.Add(row);
 
             }
@@ -98,6 +96,48 @@ namespace futureland.Views
         private void dgvRegistros_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void dgvRegistros_SelectionChanged(object sender, EventArgs e)
+        {
+            //   MessageBox.Show(dgvRegistros.SelectedRows.Count.ToString());
+            if(dgvRegistros.SelectedRows.Count > 0)
+            {
+                btnEliminarRegistros.Enabled = true;
+                
+            }
+            else
+            {
+                btnEliminarRegistros.Enabled = false;
+            }
+            
+
+
+        }
+
+        private void btnEliminarRegistros_Click(object sender, EventArgs e)
+        {
+            if (dgvRegistros.SelectedRows.Count > 0)
+            {
+                DialogResult dialogResult = MessageBox.Show("¿Eliminar "+dgvRegistros.SelectedRows.Count.ToString()+" registros seleccionados?", "Eliminar registros", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if(dialogResult == DialogResult.Yes)
+                {
+                    // registrosController.ctrEliminarRegistro(rowId); 
+                    for (int i = 0; i < dgvRegistros.SelectedRows.Count; i++)
+                    {
+                        int selectedIndex = dgvRegistros.SelectedRows[i].Index;
+                        int rowID = Convert.ToInt32(dgvRegistros[0, selectedIndex].Value);
+                        registrosController.ctrEliminarRegistros(rowID);
+                    }
+                    MessageBox.Show("Registros eliminados Correctamente");
+                    if(cbFiltro.Checked)
+                    {
+                        cbFiltro.Checked = false;
+                    }
+                    fillDataGridView();
+
+                }
+            }
         }
 
         public registroForm()

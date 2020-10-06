@@ -62,11 +62,12 @@ namespace futureland.Views
                     string desc = item["Description"].ToString();
                     string deviceId = item["DeviceID"].ToString();
 
-
+                    //MessageBox.Show(desc);
                     if (desc.Contains("Arduino"))
                     {
                         cmbCom.Items.Clear();
                         cmbCom.Items.Add(deviceId);
+
                         COM = deviceId;
                         return;
                     }
@@ -75,7 +76,8 @@ namespace futureland.Views
             }
             catch
             {
-                /* Do Nothing */
+                //RECORDATORIO IMPORTANTE
+                //En caso de presentar anomalia - Controlarla - Si no dejamos solo
             }
             MessageBox.Show("Hardware Gutacion no detectado");
         }

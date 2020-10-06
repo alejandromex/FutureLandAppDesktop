@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data.Sql;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace futureland.Controllers
 {
@@ -37,6 +36,12 @@ namespace futureland.Controllers
 
             return dt;
         }
-    
+
+        public void ctrEliminarRegistros(int rowId)
+        {
+            registrosModelo.mdlEliminarRegistros(rowId);
+        }
+
+
     }
 }

@@ -38,7 +38,6 @@ namespace futureland.Models
 
         public DataTable mdlMostrarRegistrosHumedad()
         {
-            string status = "error";
             string query = @"SELECT * from registros";
             cmd.Parameters.Clear();
             cmd.CommandText = query;
@@ -69,6 +68,15 @@ namespace futureland.Models
             conectar.CrearDb();
             
            
+        }
+
+        public void mdlEliminarRegistros(int rowId)
+        {
+            string query = @"DELETE FROM registros where id = @rowId";
+            cmd.Parameters.Clear();
+            cmd.Parameters.AddWithValue("@rowId", rowId);
+            cmd.CommandText = query;
+            conectar.Ejecutar(cmd);
         }
     }
 }
