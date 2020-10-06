@@ -20,4 +20,4 @@ Para entrar al Archivo .exe entrar a futureland > bin > Debug futureland.exe
   
   
   
-  *Contrala tu nivel de riego, por que con gutacion menos es MAS*
+  *Contrala tu nivel de riego, por que con GUTACION menos es MAS*
