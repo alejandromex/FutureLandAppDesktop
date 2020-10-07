@@ -13,6 +13,8 @@ using System.Data.Sql;
 using futureland.Helpers;
 using System.IO.Ports;
 using System.Threading;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace futureland.Views
 {
@@ -204,6 +206,22 @@ namespace futureland.Views
                     }
                 }
             }
+        }
+
+
+        private void sendSms(string messageBody)
+        {
+            const string accountSid = "AC2a00c776f893c3f74d8032fac9d980de";
+            const string authToken = "ade81e10d66b1102ed0c8b0246446e23";
+
+            TwilioClient.Init(accountSid, authToken);
+
+            var message = MessageResource.Create(
+                body: messageBody,
+                from: new Twilio.Types.PhoneNumber("+14422155717"),
+                to: new Twilio.Types.PhoneNumber("+526863412040")
+            );
+
         }
 
         private void MoverFormulario(object sender, MouseEventArgs e)
