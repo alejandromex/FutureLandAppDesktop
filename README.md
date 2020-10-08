@@ -18,6 +18,7 @@ Para entrar al Archivo .exe entrar a futureland > bin > Debug futureland.exe
   - Click al boton "Encender" Comenzara a leer lectura de la humedad presente en la tierra de manera automatica
   - Se podra consultar los registros de manera asincrona con la lectura de humedad
   
-  
+## Modificaciones
+  - 2020/07/10 Diseño con interfaz mas amigable y opciones de controlar la humedad de hasta 15 parcelas
   
   *Contrala tu nivel de riego, por que con GUTACION menos es MAS*
