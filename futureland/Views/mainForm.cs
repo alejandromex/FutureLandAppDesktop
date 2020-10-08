@@ -27,8 +27,12 @@ namespace futureland.Views
         configuracionForm configuracionForm = new configuracionForm();
         Controllers.registrosController registrosController = new Controllers.registrosController();
         List<string> parselas = new List<string>();
+        List<ProgressBar> parselasBarra = new List<ProgressBar>();
+        List<Label> parselasLabel = new List<Label>();
         private DataTable dt = new DataTable();
         List<int> notificaciones = new List<int>();
+
+        Random random = new Random();
 
         SerialPort Port;
         private bool btnInterval = true;
@@ -43,45 +47,43 @@ namespace futureland.Views
 
 
             parselas = globales.globalesParselasret();
-            Random random = new Random();
 
             for (int i = 0; i < parselas.Count; i++)
             {
 
-                int number = random.Next(1, 101);
                 
 
 
                 Label lbl = new Label();
                 lbl.Width = 300;
                 lbl.Height = 20;
-                lbl.Text = parselas[i].ToString()+" - Humedad: "+ number.ToString();
                 lbl.Location = new Point(210, y);
                 lbl.Name = "lblParsela" + (i + 1).ToString();
                 lbl.ForeColor = Color.White;
                 lbl.Font = new Font("Arial", 12, FontStyle.Bold);
+                parselasLabel.Add(lbl);
 
 
                 ProgressBar progressBar = new ProgressBar();
                 progressBar.Width = 200;
                 progressBar.Height = 20;
                 progressBar.Location = new Point(5, y);
-                progressBar.Value = number;
-                progressBar.Click += new EventHandler(mostrarMensaje_Click);
                 progressBar.Name = "pbParsela" + (i + 1).ToString();
+                progressBar.Click += new EventHandler(button1_Click);
+                parselasBarra.Add(progressBar);
 
                 y += 30;
-                panelParcelas.Controls.Add(progressBar);
+               // panelParcelas.Controls.Add(progressBar);
                 panelParcelas.Controls.Add(lbl);
             }
 
         }
 
-        private void mostrarMensaje_Click(Object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            string message = sender.ToString().Replace("System.Windows.Forms.ProgressBar", "");
-            MessageBox.Show(message);
+            
         }
+
 
         private void medidorHumedad_Click(object sender, EventArgs e)
         {
@@ -270,6 +272,16 @@ namespace futureland.Views
                                     MessageBox.Show("Error al registrar humedad");
                                 }
                             }
+                            panelParcelas.Controls.Clear();
+                            
+                            for(int i = 0; i < parselasBarra.Count; i++)
+                            {
+                                int number = random.Next(0, 101);
+                                parselasLabel[i].Text = parselas[i].ToString()+" - Humedad: "+ number.ToString();
+                                parselasBarra[i].Value = number;
+                                panelParcelas.Controls.Add(parselasBarra[i]);
+                                panelParcelas.Controls.Add(parselasLabel[i]);
+                            }
                         }));
                     }
                     catch
@@ -309,6 +321,8 @@ namespace futureland.Views
                 programarSmsForm.ShowDialog();
             }
         }
+
+        
 
         private void MoverFormulario(object sender, MouseEventArgs e)
         {
