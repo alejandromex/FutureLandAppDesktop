@@ -13,7 +13,7 @@ Para entrar al Archivo .exe entrar a futureland > bin > Debug futureland.exe
   
 # Una vez la App abierta
 
-  - Si es tu primer ingreso, Usuario: Admin, Contraseñas: Admin
+  - Si es tu primer ingreso, Usuario: admin, Contraseñas: admin
   - Dirigirse a configuraciones, seleccionar Servidor de SGBD disponible y Puerto COM donde este Gutacion
   - Click al boton "Encender" Comenzara a leer lectura de la humedad presente en la tierra de manera automatica
   - Se podra consultar los registros de manera asincrona con la lectura de humedad
