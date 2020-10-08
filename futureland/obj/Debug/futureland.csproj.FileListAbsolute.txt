@@ -16,3 +16,14 @@ D:\Alejandro\Source\C#\futureland\futureland\obj\Debug\futureland.csproj.CopyCom
 D:\Alejandro\Source\C#\futureland\futureland\obj\Debug\futureland.Views.registroForm.resources
 D:\Alejandro\Source\C#\futureland\futureland\obj\Debug\futureland.Views.configuracionForm.resources
 D:\Alejandro\Source\C#\futureland\futureland\bin\Debug\Microsoft.SqlServer.Smo.dll
+D:\Alejandro\Source\C#\futureland\futureland\bin\Debug\Microsoft.IdentityModel.Logging.dll
+D:\Alejandro\Source\C#\futureland\futureland\bin\Debug\Microsoft.IdentityModel.Tokens.dll
+D:\Alejandro\Source\C#\futureland\futureland\bin\Debug\Newtonsoft.Json.dll
+D:\Alejandro\Source\C#\futureland\futureland\bin\Debug\System.IdentityModel.Tokens.Jwt.dll
+D:\Alejandro\Source\C#\futureland\futureland\bin\Debug\Twilio.dll
+D:\Alejandro\Source\C#\futureland\futureland\bin\Debug\Microsoft.IdentityModel.Tokens.xml
+D:\Alejandro\Source\C#\futureland\futureland\bin\Debug\Newtonsoft.Json.xml
+D:\Alejandro\Source\C#\futureland\futureland\bin\Debug\System.IdentityModel.Tokens.Jwt.xml
+D:\Alejandro\Source\C#\futureland\futureland\bin\Debug\Twilio.xml
+D:\Alejandro\Source\C#\futureland\futureland\obj\Debug\futureland.Views.parselas.resources
+D:\Alejandro\Source\C#\futureland\futureland\obj\Debug\futureland.Views.programarSmsForm.resources

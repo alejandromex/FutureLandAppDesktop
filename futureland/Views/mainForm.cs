@@ -15,15 +15,21 @@ using System.IO.Ports;
 using System.Threading;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
+using CircularProgressBar;
+using futureland.Properties;
 
 namespace futureland.Views
 {
     public partial class mainForm : Form
     {
         public int xClick = 0, yClick = 0;
+        private int y = 5;
         configuracionForm configuracionForm = new configuracionForm();
         Controllers.registrosController registrosController = new Controllers.registrosController();
+        List<string> parselas = new List<string>();
         private DataTable dt = new DataTable();
+        List<int> notificaciones = new List<int>();
+
         SerialPort Port;
         private bool btnInterval = true;
         public bool isClosed = true;
@@ -33,8 +39,48 @@ namespace futureland.Views
         {
             InitializeComponent();
             Port = new SerialPort();
+            configuracionForm.ShowDialog();
 
 
+            parselas = globales.globalesParselasret();
+            Random random = new Random();
+
+            for (int i = 0; i < parselas.Count; i++)
+            {
+
+                int number = random.Next(1, 101);
+                
+
+
+                Label lbl = new Label();
+                lbl.Width = 300;
+                lbl.Height = 20;
+                lbl.Text = parselas[i].ToString()+" - Humedad: "+ number.ToString();
+                lbl.Location = new Point(210, y);
+                lbl.Name = "lblParsela" + (i + 1).ToString();
+                lbl.ForeColor = Color.White;
+                lbl.Font = new Font("Arial", 12, FontStyle.Bold);
+
+
+                ProgressBar progressBar = new ProgressBar();
+                progressBar.Width = 200;
+                progressBar.Height = 20;
+                progressBar.Location = new Point(5, y);
+                progressBar.Value = number;
+                progressBar.Click += new EventHandler(mostrarMensaje_Click);
+                progressBar.Name = "pbParsela" + (i + 1).ToString();
+
+                y += 30;
+                panelParcelas.Controls.Add(progressBar);
+                panelParcelas.Controls.Add(lbl);
+            }
+
+        }
+
+        private void mostrarMensaje_Click(Object sender, EventArgs e)
+        {
+            string message = sender.ToString().Replace("System.Windows.Forms.ProgressBar", "");
+            MessageBox.Show(message);
         }
 
         private void medidorHumedad_Click(object sender, EventArgs e)
@@ -122,14 +168,40 @@ namespace futureland.Views
 
         private void btnEncender_Click(object sender, EventArgs e)
         {
-            if (globales.globalCom == null && globales.globalDatabase == null)
+            if (globales.globalCom == null || globales.globalDatabase == null || globales.globalCom == "" || globales.globalDatabase == "")
             {
                 MessageBox.Show("Seleccione puerto COM y base de datos antes de iniciar");
             }
             else
             {
+                
                 if (btnInterval)
                 {
+                   if(notificaciones.Count == 0)
+                    {
+                        DialogResult dialogResult = MessageBox.Show("¿Desea programar notificaciones de riego?", "Noticiaciones", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            Views.programarSmsForm programarSmsForm = new programarSmsForm();
+                            programarSmsForm.ShowDialog();
+                        }
+                        else
+                        {
+                            //Rellenamos las notificaciones manualmente
+                            globales.eliminarNotificaciones();
+                            for(int i =0; i < parselas.Count; i++)
+                            {
+                                globales.agregarNotificacion(101);
+                            }
+                        }
+                    }
+                    notificaciones = globales.notificaciones();
+
+                    for (int i = 0; i < notificaciones.Count; i++)
+                    {
+                        MessageBox.Show("parsela: " + parselas[i] + " Notifica a humedad: " + notificaciones[i]);
+                    }
+
                     Thread arduino;
                     arduino = new Thread(lecturaArduino);
                     arduino.Start();
@@ -185,7 +257,6 @@ namespace futureland.Views
 
                                 }
                                 medidorHumedad.Text = "Humedad: " + cadena;
-                                lblEstado.Text = "Estado: Prendido";
                                 try
                                 {
                                      status = registrosController.ctrRegistrarHumedad(int.Parse(cadena));
@@ -222,6 +293,21 @@ namespace futureland.Views
                 to: new Twilio.Types.PhoneNumber("+526863412040")
             );
 
+        }
+
+
+        private void btnNotificaciones_Click(object sender, EventArgs e)
+        {
+            if(notificaciones.Count == 0)
+            {
+                MessageBox.Show("Aun no tienes notificaciones programadas");
+                return;
+            }
+            else
+            {
+                Views.programarSmsForm programarSmsForm = new programarSmsForm();
+                programarSmsForm.ShowDialog();
+            }
         }
 
         private void MoverFormulario(object sender, MouseEventArgs e)
